@@ -364,23 +364,46 @@ async def extract_insights_api(
     return {"insights": insights}
 
 def gerar_insights(discovery, transcricao, observacoes, cliente, idioma):
-    prompt = f"""
-    🛑 IMPORTANTE: Responda apenas em **{idioma}**. Não use outros idiomas.
+    if idioma == "portuguese":
+        prompt = f"""🛑 IMPORTANTE: Responda apenas em **português**. Não use outros idiomas.
 
-    Projeto com o cliente: **{cliente}**
+Projeto com o cliente: **{cliente}**
 
-    📂 Discovery:
-    \"\"\"{discovery}\"\"\"
+Abaixo estão os conteúdos de três fontes:
 
-    💬 Transcrição:
-    \"\"\"{transcricao}\"\"\"
+📂 Insights do discovery técnico:
+\"\"\"{discovery}\"\"\"
 
-    📌 Observações:
-    \"\"\"{observacoes}\"\"\"
+💬 Insights da transcrição da call:
+\"\"\"{transcricao}\"\"\"
 
-    Agora, una essas informações em um relatório estruturado, claro e conciso.
-    """
+📌 Observações diretas do Solutions Consultant:
+\"\"\"{observacoes}\"\"\"
 
+Agora, una essas informações em um único relatório estruturado, evitando duplicações e organizando os tópicos com o máximo de clareza e objetividade.
+
+1. 📌 **Contexto do projeto**  
+[...]
+11. 📊 **Dados operacionais e regras comerciais identificadas**  
+    - Consolide catálogo de produtos, SKUs, tipos de clientes, clusters, tabelas de preços, [...]
+    - 🔥 Transcreva fielmente; se faltar algo, exiba “Informação não fornecida nas fontes.”"""
+    
+    elif idioma == "spanish":
+        prompt = f"""🛑 IMPORTANTE: Responde solo en **español**. No utilices otros idiomas.
+
+Proyecto con el cliente: **{cliente}**
+[...]
+    - 🔥 Transcribe fielmente; si falta algo, “Información no proporcionada en las fuentes.”"""
+    
+    else:
+        prompt = f"""🛑 IMPORTANT: Respond only in **English**. Do not use any other language.
+
+Project with client: **{cliente}**
+[...]
+    - 🔥 Transcribe exactly as in the sources; if missing, “Information not provided in the sources.”"""
+
+    from openai import OpenAI
+    import os
     client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
     r = client.chat.completions.create(
         model="gpt-4-1106-preview",
