@@ -365,7 +365,7 @@ async def extract_insights_api(
 
 def gerar_insights(discovery, transcricao, observacoes, cliente, idioma):
     if idioma == "portuguese":
-        prompt = f"""🛑 IMPORTANTE: Responda apenas em **português**. Não use outros idiomas.
+        prompt = f'''🛑 IMPORTANTE: Responda apenas em **português**. Não use outros idiomas.
 
 Projeto com o cliente: **{cliente}**
 
@@ -382,149 +382,90 @@ Abaixo estão os conteúdos de três fontes:
 
 Agora, una essas informações em um único relatório estruturado, evitando duplicações e organizando os tópicos com o máximo de clareza e objetividade.
 
-1. 📌 **Contexto do projeto**  
-   - Descreva de forma completa e detalhada o modelo de operação atual da empresa.  
-   - Inclua informações como: modelo de negócios, número de centros de distribuição, número de vendedores, ticket médio, volume médio de pedidos, processos operacionais atuais, canais de venda (WhatsApp, loja online, televendas), formas de pagamento (boleto antecipado, boleto faturado, PIX, cartão), clusters de clientes, tabelas de preços, regras de promoções (combos, leve X pague Y, descontos progressivos, cupons), condições comerciais, controle de estoque (estoque por CD, disponibilidade restrita), regras de corte (dias/horários), sistemas envolvidos (Mercanet, Infracommerce, SAP, Salesforce, gateways de pagamento, APIs internas) e qualquer outro dado relevante.  
-   - 🚫 **Não resuma de forma genérica**; mantenha todos os detalhes disponíveis.  
-   - 📌 Dados quantitativos (nº de pedidos, clientes, SKUs, volumes, ticket médio) devem estar aqui.
+1. 📌 **Contexto do projeto**
+   - Descreva de forma completa e detalhada o modelo de operação atual da empresa.
+   - Inclua: modelo de negócios, CDs, vendedores, ticket médio, volume médio de pedidos, canais de venda, formas de pagamento, clusters, tabelas, promoções, estoque, regras de corte, sistemas envolvidos etc.
+   - 🚫 Não resuma; mantenha os detalhes. 📌 Inclua dados quantitativos.
 
-2. 🌟 **Objetivos principais do projeto**  
-   - Use bullets com verbos de ação fortes (Digitalizar, Automatizar, Viabilizar, Expandir, Aumentar, Implementar, Reduzir, Integrar).  
-   - Relacione cada objetivo a resultados práticos (eficiência, engajamento, automação, expansão).  
-   - Sempre que possível, conecte os objetivos às fases do projeto (fase 1 = autosserviço, fase 2 = commerce).  
-   - Evite frases genéricas como “melhorar processos”.
+2. 🌟 **Objetivos principais do projeto**
+   - Use bullets com verbos de ação fortes.
 
-3. ⚠️ **Riscos e gaps identificados** (em bullets)
+3. ⚠️ **Riscos e gaps identificados**
 
-4. 📦 **Casos de uso propostos ou discutidos** (em bullets)
+4. 📦 **Casos de uso propostos ou discutidos**
 
-5. 🔗 **Integrações mencionadas ou necessárias** (em bullets)  
-   - Descreva todos os sistemas (Mercanet, Infracommerce, gateways, ERPs, APIs internas).  
-   - Detalhe quais dados devem ser sincronizados ou expostos (catálogo, preços, estoque, status de pedidos, cadastro de clientes, dados de representantes).  
-   - Informe métodos de integração (API/REST, CSV, Webhook).  
-   - Se houver requisitos de teste, homologação, segurança ou autenticação, inclua-os.  
-   - 🚫 **Não resuma**; preserve todos os detalhes das fontes.
+5. 🔗 **Integrações mencionadas ou necessárias**
 
-6. ❓ **Dúvidas ou pontos pendentes levantados na call** (em bullets)
+6. ❓ **Dúvidas ou pontos pendentes levantados na call**
 
-7. 🔒 **Restrições técnicas ou comerciais citadas** (em bullets)
+7. 🔒 **Restrições técnicas ou comerciais citadas**
 
-8. 🧩 **Premissas acordadas entre as partes** (em bullets)
+8. 🧩 **Premissas acordadas entre as partes**
 
-9. 🔄 **Próximos passos mencionados ou sugeridos** (em bullets)
+9. 🔄 **Próximos passos mencionados ou sugeridos**
 
 10. 📝 **Observações gerais ou insights adicionais relevantes**
 
-11. 📊 **Dados operacionais e regras comerciais identificadas**  
-    - Consolide catálogo de produtos, SKUs, tipos de clientes, clusters, tabelas de preços, condições comerciais, regras de promoções, formas de pagamento, métodos de corte, controle de estoque, volumes e ticket médio.  
-    - Descreva regras de checkout: limitações de pagamento, pré-requisitos de compra, políticas de crédito, exigências de faturamento ou pagamento antecipado.  
-    - ✅ **Formato de “painel operacional”** (bullets ou tabela).  
-    - 🔥 Transcreva fielmente; se faltar algo, exiba “Informação não fornecida nas fontes.”"""
+11. 📊 **Dados operacionais e regras comerciais identificadas**
+    - Consolide catálogo, SKUs, clusters, preços, condições comerciais, promoções, formas de pagamento, regras de corte, estoque, volumes, ticket médio.
+    - ✅ Painel operacional (bullets ou tabela). 🔥 Transcreva fielmente ou escreva: “Informação não fornecida nas fontes.”'''
     elif idioma == "spanish":
-        prompt = f"""🛑 IMPORTANTE: Responde solo en **español**. No utilices otros idiomas.
+        prompt = f'''🛑 IMPORTANTE: Responde solo en **español**. No utilices otros idiomas.
 
 Proyecto con el cliente: **{cliente}**
-
-A continuación se presentan los contenidos de tres fuentes:
 
 📂 Insights del discovery técnico:
 """{discovery}"""
 
-💬 Insights de la transcripción de la llamada:
+💬 Insights de la transcripción:
 """{transcricao}"""
 
-📌 Observaciones directas del Solutions Consultant:
+📌 Observaciones del consultor:
 """{observacoes}"""
 
-Ahora, une esta información en un informe estructurado, evitando duplicaciones y organizando los temas con la mayor claridad posible.
+Ahora, une esta información en un informe con los siguientes bloques:
 
 1. 📌 **Contexto del proyecto**  
-   - Describe en detalle el modelo operativo actual de la empresa.  
-   - Incluye: modelo de negocio, número de centros de distribución, número de vendedores, ticket promedio, volumen de pedidos, procesos vigentes, canales de venta (WhatsApp, tienda online, televentas), formas de pago (boleto anticipado, boleto facturado, PIX, tarjeta), grupos de clientes, tablas de precios, reglas de promociones (combos, lleva X paga Y, descuentos progresivos, cupones), condiciones comerciales, control de inventario (por CD, disponibilidad restringida), reglas de corte (días/horarios), sistemas involucrados (Mercanet, Infracommerce, SAP, Salesforce, pasarelas, APIs internas) y cualquier otro dato relevante.  
-   - 🚫 **No resumas de forma genérica**; conserva todos los detalles.  
-   - 📌 Si hay datos cuantitativos (n.º de pedidos, clientes, SKUs, volúmenes, ticket promedio), inclúyelos.
-
 2. 🌟 **Objetivos principales del proyecto**  
-   - Usa bullets con verbos de acción (Digitalizar, Automatizar, Viabilizar, Expandir, Aumentar, Implementar, Reducir, Integrar).  
-   - Relaciona cada objetivo con resultados prácticos (eficiencia, engagement, automatización, expansión).  
-   - Conecta con fases del proyecto (fase 1 = autoservicio, fase 2 = commerce).  
-   - Evita frases genéricas como “mejorar procesos”.
-
-3. ⚠️ **Riesgos y brechas identificadas** (en bullets)
-
-4. 📦 **Casos de uso propuestos o discutidos** (en bullets)
-
-5. 🔗 **Integraciones mencionadas o necesarias** (en bullets)  
-   - Describe todos los sistemas, datos, métodos, requisitos de prueba/homologación/seguridad.  
-   - 🚫 **No resumas**; conserva todos los detalles.
-
-6. ❓ **Dudas o puntos pendientes planteados en la llamada** (en bullets)
-
-7. 🔒 **Restricciones técnicas o comerciales mencionadas** (en bullets)
-
-8. 🧩 **Supuestos acordados entre las partes** (en bullets)
-
-9. 🔄 **Próximos pasos mencionados o sugeridos** (en bullets)
-
+3. ⚠️ **Riesgos y brechas identificadas**  
+4. 📦 **Casos de uso propuestos o discutidos**  
+5. 🔗 **Integraciones mencionadas o necesarias**  
+6. ❓ **Dudas o puntos pendientes planteados en la llamada**  
+7. 🔒 **Restricciones técnicas o comerciales**  
+8. 🧩 **Supuestos acordados entre las partes**  
+9. 🔄 **Próximos pasos mencionados o sugeridos**  
 10. 📝 **Observaciones generales o insights adicionales**  
-
 11. 📊 **Datos operativos y reglas comerciales identificadas**  
-    - Consolida catálogo, SKUs, clusters, tablas de precios, condiciones comerciales, reglas de promociones, formas de pago, métodos de corte, control de inventario, volúmenes, ticket medio.  
-    - Describe reglas de checkout: limitaciones de pago, prerrequisitos, políticas de crédito, requisitos de facturación o anticipación.  
-    - ✅ **Panel operativo** (bullets ou tabla).  
-    - 🔥 Transcribe fielmente; si falta algo, “Información no proporcionada en las fontes.”"""
+    - Consolida catálogo, SKUs, clusters, precios, promociones, pagos, corte, inventario, volúmenes y ticket. 🔥 Transcribe fielmente.'''
     else:
-        prompt = f"""🛑 IMPORTANT: Respond only in **English**. Do not use any other language.
+        prompt = f'''🛑 IMPORTANT: Respond only in **English**. Do not use any other language.
 
 Project with client: **{cliente}**
 
-Below are the contents from three sources:
-
-📂 Insights from the technical discovery:
+📂 Discovery insights:
 """{discovery}"""
 
-💬 Insights from the call transcript:
+💬 Call transcript:
 """{transcricao}"""
 
-📌 Consultant’s direct notes:
+📌 Consultant notes:
 """{observacoes}"""
 
-Now, merge this information into a single structured report, avoiding duplication and organizing the topics clearly and concisely.
+Please generate a structured report with these sections:
 
-1. 📌 **Project context**  
-   - Describe in full detail the company’s current operating model: business model, number of distribution centers, number of sales reps, average ticket, order volume, current processes, sales channels (WhatsApp, online store, telesales), payment methods (boleto antecipado, boleto faturado, PIX, credit card), customer clusters, price tables, promotion rules (combos, buy X pay Y, tiered discounts, coupons), commercial conditions, inventory control (by DC, restricted availability), cut-off rules (days/hours), systems involved (Mercanet, Infracommerce, SAP, Salesforce, payment gateways, internal APIs) and any other relevant data.  
-   - 🚫 **Do not summarize generically**; preserve all details.  
-   - 📌 If quantitative data exists (order count, customers, SKUs, volumes, average ticket), include it.
-
-2. 🌟 **Main objectives of the project**  
-   - Use bullets with strong action verbs (Digitize, Automate, Enable, Expand, Increase, Implement, Reduce, Integrate).  
-   - Link each objective to practical outcomes (efficiency, engagement, automation, expansion).  
-   - When possible, tie objectives to project phases (phase 1 = self-service, phase 2 = commerce).  
-   - Avoid generic phrases like “improve processes.”
-
-3. ⚠️ **Identified risks and gaps** (in bullets)
-
-4. 📦 **Proposed or discussed use cases** (in bullets)
-
-5. 🔗 **Mentioned or required integrations** (in bullets)  
-   - Describe all systems, data, methods, security requirements.  
-   - 🚫 **Do not summarize.**
-
-6. ❓ **Open questions or pending issues raised in the call** (in bullets)
-
-7. 🔒 **Technical or commercial constraints mentioned** (in bullets)
-
-8. 🧩 **Agreed assumptions between the parties** (in bullets)
-
-9. 🔄 **Suggested or mentioned next steps** (in bullets)
-
+1. 📌 **Project context**
+2. 🌟 **Main objectives of the project**
+3. ⚠️ **Identified risks and gaps**
+4. 📦 **Proposed or discussed use cases**
+5. 🔗 **Mentioned or required integrations**
+6. ❓ **Open questions or pending issues raised**
+7. 🔒 **Technical or commercial constraints**
+8. 🧩 **Agreed assumptions between the parties**
+9. 🔄 **Suggested or mentioned next steps**
 10. 📝 **General observations or additional insights**
-
-11. 📊 **Operational data and commercial rules identified**  
-    - Consolidate catalog, SKUs, clusters, price tables, commercial conditions, promotion rules, payment methods, DC cut-off rules, inventory controls, volumes, ticket.  
-    - Describe checkout rules: payment limitations, purchase prerequisites, credit policies, billing or advance payment requirements.  
-    - ✅ **This must be an “operational panel”** (bullets or table).  
-    - 🔥 Transcribe exactly as in the sources; if missing, “Information not provided in the sources.”"""
+11. 📊 **Operational data and commercial rules identified**
+    - Consolidate catalog, SKUs, clusters, price tables, conditions, promotion rules, payment methods, cutoff rules, inventory, volumes, ticket.
+    - ✅ Operational panel (bullets or table). 🔥 If missing: “Information not provided in the sources.”'''
 
     from openai import OpenAI
     import os
